@@ -17,6 +17,7 @@ export default class FixedDimensionsBasics extends Component {
       output: '0',
       opr: 0,
       blkh: '',
+      ans: 0
     };
   }
   onClear(cmd, num) {
@@ -25,6 +26,7 @@ export default class FixedDimensionsBasics extends Component {
       this.setState({ tmp: '' });
       this.setState({ opr: 0 });
       this.setState({ blkh: '' });
+      this.setState({ ans: 0 });
     }
   }
   onPut(opr) {
@@ -33,30 +35,35 @@ export default class FixedDimensionsBasics extends Component {
     this.setState({ tmp: this.state.output });
     // console.log('blkh ' + this.state.blkh);
     var ss;
-    if (this.state.opr==1){
-      
+    if (this.state.opr == 1) {
       if (this.state.blkh == '+') {
         ss = Number(this.state.tmp) + Number(this.state.output);
-      }if (this.state.blkh == '-') {
+      }
+      if (this.state.blkh == '-') {
         ss = Number(this.state.tmp) - Number(this.state.output);
-      }if (this.state.blkh == '*') {
+      }
+      if (this.state.blkh == '*') {
         ss = Number(this.state.tmp) * Number(this.state.output);
-      }if (this.state.blkh == '/') {
+      }
+      if (this.state.blkh == '/') {
         ss = Number(this.state.tmp) / Number(this.state.output);
       }
       this.setState({ tmp: ss.toString() });
       this.setState({ output: ss.toString() });
     }
     if (opr == '=') {
-
       this.setState({ opr: 0 });
+      this.setState({ ans: 1 });
       if (this.state.blkh == '+') {
         ss = Number(this.state.tmp) + Number(this.state.output);
-      }if (this.state.blkh == '-') {
+      }
+      if (this.state.blkh == '-') {
         ss = Number(this.state.tmp) - Number(this.state.output);
-      }if (this.state.blkh == '*') {
+      }
+      if (this.state.blkh == '*') {
         ss = Number(this.state.tmp) * Number(this.state.output);
-      }if (this.state.blkh == '/') {
+      }
+      if (this.state.blkh == '/') {
         ss = Number(this.state.tmp) / Number(this.state.output);
       }
       this.setState({ output: ss.toString() });
@@ -65,7 +72,8 @@ export default class FixedDimensionsBasics extends Component {
   onNum(n) {
     if (this.state.opr == 0) {
       //1
-      if (this.state.output == '0') {
+      if (this.state.output == '0' || this.state.ans == 1) {
+        this.setState({ ans: 0 });
         this.setState({ output: n });
       } else {
         this.setState({ output: this.state.output + n });
@@ -79,7 +87,17 @@ export default class FixedDimensionsBasics extends Component {
       } else {
         this.setState({ output: this.state.output + n });
       }
-    }
+    } //else if (this.state.blkh == '=') {
+    //   //2
+    //   if (this.state.output == '0') {
+    //     this.setState({ output: n });
+    //   } else if (this.state.output == this.state.tmp) {
+    //     this.setState({ output: n });
+    //   } else {
+    //     this.setState({ output: this.state.output + n });
+    //   }
+    // }
+    
   }
 
   render() {
@@ -93,7 +111,14 @@ export default class FixedDimensionsBasics extends Component {
 
           <View
             style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-            <Text style={{ flex: 1,textAlign: 'right' ,fontSize:60,color:'white',paddingRight:30}}>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: 'right',
+                fontSize: 60,
+                color: 'white',
+                paddingRight: 30,
+              }}>
               {this.state.output}
             </Text>
           </View>
@@ -265,6 +290,6 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 0,
     fontSize: 35,
-    color: 'white'
+    color: 'white',
   },
 });
